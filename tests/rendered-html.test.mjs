@@ -16,8 +16,8 @@ test("headline counts from the pipeline are rendered", () => {
 });
 
 test("key results are rendered", () => {
-  assert.match(html, /−5\.4%/); // naive 0-100 ft
   assert.match(html, /−5\.8%/); // corridor 0-100 ft
+  assert.match(html, /\+1\.2%/); // embedded 0-100 ft, whole-village model
   assert.match(html, /\+0\.9%/); // ring embedded 0-100 ft
   assert.match(html, /7,990/); // ring sample
 });

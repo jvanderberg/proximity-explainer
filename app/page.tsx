@@ -12,7 +12,6 @@ const REPO_URL = "https://github.com/jvanderberg/op-mf-proximity";
 const pctWithin800 = Math.round(((D.nHomes - D.anyDesc[4].n) / D.nHomes) * 100);
 const fmtPct = (v: number) => `${v > 0 ? "+" : v < 0 ? "−" : ""}${Math.abs(v).toFixed(1)}%`;
 const fmtT = (t: number) => `t = ${t < 0 ? "−" : ""}${Math.abs(t).toFixed(1)}`;
-const fmtK = (v: number) => `$${Math.round(v / 1000)}k`;
 
 function useScrollSteps(count: number) {
   const [active, setActive] = useState(0);
@@ -125,111 +124,23 @@ function MapStory() {
   );
 }
 
-/* ---------- Chapter 2: the naive answer ---------- */
-
-const naiveSteps: StoryStep[] = [
-  {
-    kicker: "At first glance",
-    title: "Houses near apartments do sell for less.",
-    body: `Median value climbs steadily with distance: ${fmtK(D.anyDesc[0].medMV)} within 100 feet of a multi-family building, ${fmtK(D.anyDesc[4].medMV)} at 800 feet or more. Look no further and the fear seems confirmed.`,
-  },
-  {
-    kicker: "Controlling for the house",
-    title: "The gap survives an apples-to-apples comparison.",
-    body: `Some of that is just smaller, older houses near apartments. But compare observably similar houses — same size, lot, age, beds, baths, quality, condition, same neighborhood — and being within 100 feet of multi-family still comes with a ${fmtPct(D.naive[0].pct)} value gap. This is the statistic the fear is built on, and it is real.`,
-  },
-  {
-    kicker: "But",
-    title: "Correlation has an alibi to check.",
-    body: "Before blaming the buildings, look at where they stand. Multi-family in Oak Park was mostly built along streetcar lines — which are today's busiest streets.",
-  },
-];
-
-function BandsChart({ mode }: { mode: number }) {
-  const W = 620, H = 430, PL = 14, PB = 66, PT = 54;
-  const bw = (W - PL * 2) / 5;
-  if (mode === 0) {
-    const max = 750000;
-    return (
-      <svg viewBox={`0 0 ${W} ${H}`} className="chart" role="img" aria-label="Median home value by distance to the nearest multi-family building, from $560,000 within 100 feet to $720,000 at 800 feet or more.">
-        {D.anyDesc.map((d, i) => {
-          const bh = (d.medMV / max) * (H - PB - PT);
-          const x = PL + i * bw + 12;
-          return (
-            <g key={d.band}>
-              <rect className="bar single" x={x} y={H - PB - bh} width={bw - 24} height={bh} rx={3} />
-              <text className="val" x={x + (bw - 24) / 2} y={H - PB - bh - 10} textAnchor="middle">{fmtK(d.medMV)}</text>
-              <text className="cat" x={x + (bw - 24) / 2} y={H - PB + 20} textAnchor="middle">{d.band}</text>
-              <text className="sub" x={x + (bw - 24) / 2} y={H - PB + 36} textAnchor="middle">{d.n.toLocaleString()} homes</text>
-            </g>
-          );
-        })}
-        <line className="axis" x1={PL} y1={H - PB} x2={W - PL} y2={H - PB} />
-        <text className="axis-title" x={W / 2} y={H - 10} textAnchor="middle">DISTANCE TO NEAREST MULTI-FAMILY BUILDING</text>
-      </svg>
-    );
-  }
-  const zero = PT + 40, scale = 42;
-  return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="chart" role="img" aria-label="Value difference versus houses 800 or more feet away, after controls: minus 5.4 percent within 100 feet, shrinking with distance.">
-      <line className="zero" x1={PL} y1={zero} x2={W - PL} y2={zero} />
-      {D.naive.map((d, i) => {
-        const bh = Math.abs(d.pct) * scale;
-        const x = PL + i * bw + 12;
-        return (
-          <g key={d.band}>
-            <rect className="bar neg" x={x} y={zero} width={bw - 24} height={bh} rx={3} />
-            <text className="val" x={x + (bw - 24) / 2} y={zero + bh + 22} textAnchor="middle">{fmtPct(d.pct)}</text>
-            <text className="tstat" x={x + (bw - 24) / 2} y={zero + bh + 40} textAnchor="middle">{fmtT(d.t)}</text>
-            <text className="cat" x={x + (bw - 24) / 2} y={zero - 12} textAnchor="middle">{d.band}</text>
-          </g>
-        );
-      })}
-      <g>
-        <text className="cat" x={PL + 4 * bw + 12 + (bw - 24) / 2} y={zero - 12} textAnchor="middle">800+ ft</text>
-        <text className="sub" x={PL + 4 * bw + 12 + (bw - 24) / 2} y={zero + 22} textAnchor="middle">reference</text>
-      </g>
-      <text className="axis-title" x={W / 2} y={H - 10} textAnchor="middle">VALUE VS. SIMILAR HOUSE 800+ FT AWAY, WITH FULL CONTROLS</text>
-    </svg>
-  );
-}
-
-function NaiveStory() {
-  const { active, refs } = useScrollSteps(naiveSteps.length);
-  return (
-    <section className="scroll-story naive-story">
-      <div className="story-stage">
-        <div className={`stage-card nscene-${active}`}>
-          <div className="card-heading">
-            <span>DISTANCE VS. VALUE · ALL {D.nHomes.toLocaleString()} HOMES</span>
-            <strong>{active === 0 ? "The raw pattern" : "Similar houses, with controls"}</strong>
-          </div>
-          <BandsChart mode={active === 0 ? 0 : 1} />
-        </div>
-        <Counter active={active} total={naiveSteps.length} />
-      </div>
-      <StoryText steps={naiveSteps} active={active} refs={refs} />
-    </section>
-  );
-}
-
-/* ---------- Chapter 3: corridor vs embedded, on the map ---------- */
+/* ---------- Chapter 2: corridor vs embedded, on the map ---------- */
 
 const corridorSteps: StoryStep[] = [
   {
-    kicker: "Look where they stand",
+    kicker: "The method, continued",
     title: "Multi-family clusters on busy streets.",
     body: `Color each building by its location and the red dots trace the arterials — Harlem, North Avenue, Madison, Roosevelt, Austin. A corridor building fronts a named arterial, sits on a corner within 150 feet of one, or stands within 300 feet of commercial property. That's ${D.nCorridor.toLocaleString()} of the ${D.nBuildings.toLocaleString()}.`,
   },
   {
-    kicker: "The confounder",
+    kicker: "Why that matters",
     title: "Busy streets discount houses all by themselves.",
-    body: "Houses near arterials and commercial strips run 3–6% below similar houses on quiet blocks — traffic, noise, curb cuts — apartment or no apartment. A test that ignores this hands the street's discount to whatever happens to be built along it.",
+    body: "Houses near arterials and commercial strips run 3–6% below similar houses on quiet blocks — traffic, noise, curb cuts — apartment or no apartment. Leave that in and the street's discount gets pinned on whatever happens to be built along it. So corridor buildings are set aside, estimated separately from the question we care about.",
   },
   {
     kicker: "The clean test",
-    title: `${D.nEmbedded} buildings sit mid-block among houses.`,
-    body: "The blue dots are embedded: multi-family on quiet residential streets, away from the arterials and the commercial strips. This is exactly the kind of building zoning reform would allow more of. So — do these discount their neighbors?",
+    title: `That leaves ${D.nEmbedded} buildings, mid-block among houses.`,
+    body: "The blue dots are embedded: multi-family on quiet residential streets, away from the arterials and the commercial strips. This is exactly the kind of building zoning reform would allow more of. The question is whether these discount their neighbors.",
   },
 ];
 
@@ -260,19 +171,14 @@ function CorridorStory() {
 
 const splitSteps: StoryStep[] = [
   {
-    kicker: "Split the sample",
-    title: "The corridor discount is real.",
-    body: `Houses within 100 feet of a corridor building are valued ${fmtPct(D.split.corridor[0].pct)} versus similar houses far from any multi-family, and the discount fades with distance — the classic footprint of a real, local disamenity. This is the busy street being priced.`,
+    kicker: "The results, continued",
+    title: "Zero at every distance, village-wide too.",
+    body: `The ring result isn't a fluke of the design. In the whole-village model, houses near embedded multi-family show ${fmtPct(D.split.embedded[0].pct)} at 0–100 feet, ${fmtPct(D.split.embedded[1].pct)} at 100–200, ${fmtPct(D.split.embedded[2].pct)} at 200–400 — slightly positive, statistically indistinguishable from zero, never negative anywhere.`,
   },
   {
-    kicker: "Now the embedded buildings",
-    title: "Embedded buildings: nothing.",
-    body: `Estimated in the same model, at the same distances, houses near embedded multi-family show ${fmtPct(D.split.embedded[0].pct)} at 0–100 feet — slightly positive, statistically indistinguishable from zero, and never negative at any distance.`,
-  },
-  {
-    kicker: "Read it again",
-    title: "The entire “apartment discount” belonged to the street.",
-    body: "Separate the corridor from the building and the building effect disappears. The −5% headline number from before was traffic wearing an apartment costume.",
+    kicker: "And the streets we set aside?",
+    title: "The corridor discount is right where we left it.",
+    body: `Estimated in the same model, houses near corridor buildings run ${fmtPct(D.split.corridor[0].pct)} up close, fading with distance — the busy street being priced, exactly as expected. The street carries a discount. The building doesn't.`,
   },
 ];
 
@@ -317,7 +223,7 @@ function SplitChart({ phase }: { phase: number }) {
         <rect className="bar pos" x={PL + 110} y={PT - 40} width={14} height={14} rx={3} />
         <text className="cat" x={PL + 130} y={PT - 28}>EMBEDDED</text>
       </g>
-      {phase >= 2 && <text className="annotation" x={W / 2} y={PT + 6} textAnchor="middle">the discount tracks the street, not the housing type</text>}
+      {phase >= 1 && <text className="annotation" x={W / 2} y={PT + 6} textAnchor="middle">the discount tracks the street, not the housing type</text>}
     </svg>
   );
 }
@@ -329,8 +235,8 @@ function SplitStory() {
       <div className="story-stage">
         <div className={`stage-card sscene-${active}`}>
           <div className="card-heading">
-            <span>CORRIDOR AND EMBEDDED, ESTIMATED TOGETHER</span>
-            <strong>{active === 0 ? "The street is priced…" : active === 1 ? "…the building is not" : "One confounder, whole story"}</strong>
+            <span>WHOLE-VILLAGE MODEL · BOTH TYPES ESTIMATED TOGETHER</span>
+            <strong>{active === 0 ? "Embedded: flat everywhere" : "Corridor: the street being priced"}</strong>
           </div>
           <SplitChart phase={active} />
         </div>
@@ -358,12 +264,7 @@ const ringSteps: StoryStep[] = [
   {
     kicker: "At scale",
     title: `${D.ring.embedded.buildings} buildings, ${D.ring.embedded.n.toLocaleString()} houses.`,
-    body: "Run that comparison simultaneously around every embedded building with houses in its rings, with the full set of house controls on top. If living beside a 2-flat or a small apartment building costs you anything, this is where it shows up.",
-  },
-  {
-    kicker: "The verdict",
-    title: `${fmtPct(D.ring.embedded.bands[0].pct)}. Statistically zero.`,
-    body: `Houses within 100 feet of an embedded building are valued ${fmtPct(D.ring.embedded.bands[0].pct)} relative to houses 400–800 feet from the same building (${fmtT(D.ring.embedded.bands[0].t)}). And the method isn't blind: run the identical design on corridor buildings and it still finds ${fmtPct(D.ring.corridor.bands[0].pct)}. There is simply nothing there for embedded.`,
+    body: "Run that comparison simultaneously around every embedded building with houses in its rings, with the full set of house controls on top. If living beside a 2-flat or a small apartment building costs you anything, this is where it shows up. That's the whole method — now the results.",
   },
 ];
 
@@ -430,15 +331,9 @@ function RingStory() {
         <div className={`stage-card ring-card rscene-${active}`}>
           <div className="card-heading">
             <span>RING DESIGN · ONE FIXED EFFECT PER BUILDING</span>
-            <strong>{active <= 1 ? "One building, four rings" : active === 2 ? `× ${D.ring.embedded.buildings} embedded buildings` : "The answer"}</strong>
+            <strong>{active <= 1 ? "One building, four rings" : `× ${D.ring.embedded.buildings} embedded buildings`}</strong>
           </div>
           <RingDiagram active={active} />
-          {active === 3 && (
-            <div className="ring-verdict">
-              <strong>{fmtPct(D.ring.embedded.bands[0].pct)}</strong>
-              <span>{fmtT(D.ring.embedded.bands[0].t)} · STATISTICALLY ZERO</span>
-            </div>
-          )}
         </div>
         <Counter active={active} total={ringSteps.length} />
       </div>
@@ -474,44 +369,19 @@ function DoseBand() {
   );
 }
 
-function RobustnessBand() {
+function VerdictBand() {
   return (
-    <section className="robust-band">
-      <div className="robust-intro">
-        <span>WE TRIED TO BREAK IT</span>
-        <h2>The zero doesn&rsquo;t move.</h2>
-        <p>
-          Redraw the corridor/embedded line at 200, 300 or 400 feet from commercial. Swap the
-          location controls from none, to 11 neighborhoods, to 148 fine grid cells. The embedded
-          estimate at 0–100 ft stays a hair above zero every single time — while the corridor
-          discount stays large and negative.
-        </p>
+    <section className="verdict-band">
+      <div className="verdict-stat">
+        {fmtPct(D.ring.embedded.bands[0].pct)}
+        <em>{fmtT(D.ring.embedded.bands[0].t)}</em>
       </div>
-      <div className="robust-grid">
-        <div className="robust-col">
-          <h3>Corridor cutoff</h3>
-          {D.thresholds.map((t) => (
-            <div className="robust-row" key={t.label}>
-              <span>{t.label}</span>
-              <em className="cor-chip">{fmtPct(t.corridor)}</em>
-              <em className="emb-chip">{fmtPct(t.embedded)}</em>
-            </div>
-          ))}
-        </div>
-        <div className="robust-col">
-          <h3>Location control</h3>
-          {D.feVariants.map((t) => (
-            <div className="robust-row" key={t.label}>
-              <span>{t.label}</span>
-              <em className="cor-chip">{fmtPct(t.corridor)}</em>
-              <em className="emb-chip">{fmtPct(t.embedded)}</em>
-            </div>
-          ))}
-        </div>
-        <div className="robust-key">
-          <span className="key cor-key"><i />CORRIDOR AT 0–100 FT</span>
-          <span className="key emb-key"><i />EMBEDDED AT 0–100 FT</span>
-        </div>
+      <div>
+        <span>THE HEADLINE RESULT</span>
+        <h2>Next to an embedded building: nothing.</h2>
+        <p>
+          {`Houses within 100 feet of an embedded multi-family building are valued ${fmtPct(D.ring.embedded.bands[0].pct)} relative to houses 400–800 feet from the same building — statistically zero. And the design isn't blind: run it on corridor buildings and it still finds ${fmtPct(D.ring.corridor.bands[0].pct)}. When there's a real effect, this method sees it. For embedded buildings, there is simply nothing to see.`}
+        </p>
       </div>
     </section>
   );
@@ -586,35 +456,34 @@ export default function Home() {
 
       <section className="bridge method-bridge">
         <div>
-          <span>THE METHOD, PART ONE</span>
+          <span>THE METHOD</span>
           <h2>Compare like with like.</h2>
           <p>
             A house&rsquo;s value is mostly its size, lot, age, and condition. So every comparison from
             here on holds those fixed — building and lot square footage, age, bedrooms, bathrooms,
             fireplaces, central air, garage, basement, construction quality, repair state, and
-            neighborhood. What&rsquo;s left is location: does distance to multi-family still move the number?
+            neighborhood. What&rsquo;s left is location: does distance to multi-family move the number?
+            One trap has to be dealt with first.
           </p>
         </div>
       </section>
 
-      <NaiveStory />
-
       <CorridorStory />
-
-      <SplitStory />
 
       <section className="bridge ring-bridge">
         <div>
-          <span>THE METHOD, PART TWO</span>
-          <h2>Still not convinced? Shrink the comparison to a single block.</h2>
+          <span>THE SHARPEST TOOL</span>
+          <h2>Then shrink every comparison to a single block.</h2>
         </div>
       </section>
 
       <RingStory />
 
-      <DoseBand />
+      <VerdictBand />
 
-      <RobustnessBand />
+      <SplitStory />
+
+      <DoseBand />
 
       <LiteratureBand />
 

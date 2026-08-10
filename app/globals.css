@@ -105,11 +105,10 @@ a { color: inherit; }
 .chart .axis-title { font: 8.5px Arial, sans-serif; letter-spacing: .14em; fill: #9a937f; }
 .chart .annotation { font: italic 15px Georgia, serif; fill: var(--red); animation: chartIn .5s; }
 
-/* split scene: embedded bars enter at step 1 */
-.sscene-0 .emb-bar { opacity: .12; }
-.sscene-1 .emb-bar, .sscene-2 .emb-bar { opacity: 1; }
+/* split scene: embedded results first, corridor contrast enters at step 1 */
+.sscene-0 .cor-bar { opacity: .12; }
+.sscene-1 .cor-bar { opacity: 1; }
 .emb-bar, .cor-bar { transition: opacity .6s; }
-.sscene-2 .cor-bar { opacity: .55; }
 
 /* ---------- ring design ---------- */
 .ring-story .story-stage { background: var(--stage); }
@@ -125,13 +124,10 @@ a { color: inherit; }
 .ring-diagram .rk.far { fill: #1b567f; font-weight: bold; }
 
 .rscene-0 .rh { opacity: .5; }
-.rscene-1 .rh, .rscene-2 .rh, .rscene-3 .rh { opacity: .28; }
-.rscene-1 .rh.band-0, .rscene-2 .rh.band-0, .rscene-3 .rh.band-0 { fill: var(--gold-mark); opacity: 1; }
-.rscene-1 .rh.band-3, .rscene-2 .rh.band-3, .rscene-3 .rh.band-3 { fill: var(--blue); opacity: .95; }
+.rscene-1 .rh, .rscene-2 .rh { opacity: .28; }
+.rscene-1 .rh.band-0, .rscene-2 .rh.band-0 { fill: var(--gold-mark); opacity: 1; }
+.rscene-1 .rh.band-3, .rscene-2 .rh.band-3 { fill: var(--blue); opacity: .95; }
 .rscene-1 .rk, .rscene-2 .rk { opacity: 1; }
-.ring-verdict { position: absolute; inset: auto 0 0; top: 38%; display: grid; place-content: center; text-align: center; background: rgba(250, 246, 236, .88); animation: chartIn .5s; }
-.ring-verdict strong { font: clamp(80px, 9vw, 130px)/1 Georgia, serif; letter-spacing: -.06em; color: var(--navy); }
-.ring-verdict span { font-size: 11px; letter-spacing: .18em; color: var(--muted); margin-top: 12px; }
 
 /* ---------- bridges ---------- */
 .bridge { min-height: 78dvh; background: var(--navy); color: white; display: grid; place-items: center; text-align: center; padding: 90px 24px; }
@@ -152,20 +148,13 @@ a { color: inherit; }
 .dose-tile strong { font: 42px/1 Georgia, serif; letter-spacing: -.04em; }
 .dose-tile em { font: italic 12px Georgia, serif; color: var(--muted); justify-self: end; }
 
-/* ---------- robustness ---------- */
-.robust-band { padding: 110px 7vw; background: var(--paper); }
-.robust-intro { max-width: 820px; margin-bottom: 55px; }
-.robust-intro > span { font-size: 10px; letter-spacing: .18em; font-weight: bold; color: var(--red); }
-.robust-intro h2 { font: clamp(40px, 5vw, 68px)/1 Georgia, serif; letter-spacing: -.045em; margin: 16px 0 22px; }
-.robust-intro p { font: 18px/1.6 Georgia, serif; }
-.robust-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px 60px; max-width: 980px; }
-.robust-col h3 { font: 22px Georgia, serif; margin: 0 0 16px; border-bottom: 2px solid var(--ink); padding-bottom: 10px; }
-.robust-row { display: grid; grid-template-columns: 1fr auto auto; gap: 14px; align-items: center; padding: 11px 0; border-bottom: 1px solid #ddd6c8; }
-.robust-row span { font-size: 12px; letter-spacing: .05em; color: var(--muted); }
-.robust-row em { font: bold 17px Georgia, serif; font-style: normal; padding: 5px 10px; min-width: 74px; text-align: center; }
-.cor-chip { background: rgba(217, 75, 50, .13); color: #a53722; }
-.emb-chip { background: rgba(38, 120, 178, .13); color: #1b567f; }
-.robust-key { grid-column: 1 / -1; display: flex; gap: 24px; }
+/* ---------- verdict band ---------- */
+.verdict-band { padding: 110px 7vw; background: var(--gold); display: grid; grid-template-columns: .85fr 1.15fr; gap: 7vw; align-items: center; }
+.verdict-stat { font: clamp(96px, 13vw, 190px)/.9 Georgia, serif; letter-spacing: -.06em; color: var(--navy); white-space: nowrap; display: flex; flex-direction: column; }
+.verdict-stat em { font: italic 16px/1 Georgia, serif; letter-spacing: 0; color: #6a5008; margin-top: 18px; }
+.verdict-band span { font-size: 10px; letter-spacing: .18em; font-weight: bold; color: var(--red); }
+.verdict-band h2 { font: clamp(40px, 4.8vw, 62px)/1 Georgia, serif; letter-spacing: -.04em; margin: 15px 0 25px; }
+.verdict-band p { font: 19px/1.55 Georgia, serif; max-width: 600px; }
 
 /* ---------- literature ---------- */
 .lit-band { padding: 110px 7vw 100px; background: var(--navy); color: #fff; }
@@ -225,9 +214,9 @@ footer a { white-space: nowrap; }
   .card-heading strong { font-size: 16px; }
   .ring-verdict strong { font-size: 56px; }
   .bridge h2 { font-size: 40px; }
+  .verdict-band { grid-template-columns: 1fr; padding: 80px 24px; gap: 30px; }
+  .verdict-stat { font-size: 88px; }
   .dose-band { grid-template-columns: 1fr; padding: 80px 24px; }
-  .robust-band { padding: 80px 24px; }
-  .robust-grid { grid-template-columns: 1fr; }
   .lit-band { padding: 80px 24px; }
   .lit-cards { grid-template-columns: 1fr; }
   .finale { padding: 90px 24px; }
