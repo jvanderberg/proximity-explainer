@@ -264,9 +264,14 @@ function RingStory() {
     <section className="scroll-story ring-story">
       <div className="story-stage">
         <div className={`stage-card ring-card rscene-${active}`}>
-          <div className="card-heading">
-            <span>RING DESIGN · ONE FIXED EFFECT PER BUILDING</span>
-            <strong>{active <= 1 ? "One building, four rings" : `× ${D.ring.embedded.buildings} embedded buildings`}</strong>
+          <div className="card-heading ring-heading">
+            <strong>
+              {active === 0
+                ? "Rings at 100, 200, 400 and 800 feet around one embedded building"
+                : active === 1
+                  ? "Houses inside 100 feet, measured against houses 400–800 feet from the same building"
+                  : `The same comparison, run around all ${D.ring.embedded.buildings} embedded buildings at once`}
+            </strong>
           </div>
           <RingDiagram active={active} />
         </div>
