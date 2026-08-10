@@ -1,5 +1,7 @@
 # proximity-explainer
 
+**[Read the live explainer →](https://jvanderberg.github.io/proximity-explainer/)**
+
 A scroll-driven visual explainer answering one question: **do apartments hurt
 the value of the houses next door?** It walks through the data and methodology
 of [op-mf-proximity](https://github.com/jvanderberg/op-mf-proximity), which

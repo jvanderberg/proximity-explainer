@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://proximity.yesoakpark.org"),
+  metadataBase: new URL("https://jvanderberg.github.io/proximity-explainer/"),
   title: "Do Apartments Hurt Home Values? Oak Park Checked.",
   description:
     "A visual walk through every house and every multi-family building in Oak Park, Illinois — and what the data says about apartments and property values.",
