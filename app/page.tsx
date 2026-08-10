@@ -361,29 +361,23 @@ function LiteratureBand() {
         <span>OAK PARK ISN&rsquo;T SPECIAL</span>
         <h2>The research keeps finding the same thing.</h2>
         <p>
-          This is one suburb, measured once. But studies that watch what actually happens when
-          multi-family arrives reach the same conclusion in city after city: neutral-to-positive
-          effects on nearby values.
+          This is one suburb, measured once. But studies that look directly at what multi-family
+          housing does to the single-family homes around it keep reaching the same conclusion:
+          nothing.
         </p>
       </div>
       <div className="lit-cards">
         <article>
-          <b>11 U.S. CITIES · 2023</b>
-          <h3>New apartment buildings lowered nearby rents.</h3>
-          <p>Asquith, Mast &amp; Reed tracked large new market-rate buildings in low-income areas: rents within 800 feet fell 5–7% relative to comparable blocks slightly farther away.</p>
-          <a href="https://direct.mit.edu/rest/article/105/2/359/100977" target="_blank" rel="noreferrer">Review of Economics and Statistics ↗</a>
+          <b>SUBURBAN BOSTON · 2005</b>
+          <h3>Large apartment developments left nearby house values untouched.</h3>
+          <p>MIT&rsquo;s Center for Real Estate tracked 36,000 sales around seven large, deliberately controversial mixed-income rental developments. House prices next to them simply tracked the surrounding market.</p>
+          <a href="https://news.mit.edu/2005/housing" target="_blank" rel="noreferrer">Pollakowski, Ritchay &amp; Weinrobe ↗</a>
         </article>
         <article>
           <b>MINNEAPOLIS · 2021</b>
           <h3>Legalizing multi-family didn&rsquo;t dent house prices.</h3>
           <p>After the 2040 Plan allowed triplexes on every lot, Kuhlmann found single-family parcels gaining multi-family rights rose modestly in value. They did not fall.</p>
           <a href="https://www.tandfonline.com/doi/full/10.1080/01944363.2020.1852101" target="_blank" rel="noreferrer">J. of the American Planning Assoc. ↗</a>
-        </article>
-        <article>
-          <b>AUCKLAND · 2023</b>
-          <h3>Big upzoning, big building boom.</h3>
-          <p>Greenaway-McGrevy &amp; Phillips showed Auckland&rsquo;s sweeping upzoning set off the sustained construction surge that skeptics said would never come.</p>
-          <a href="https://www.sciencedirect.com/science/article/pii/S0094119023000244" target="_blank" rel="noreferrer">Journal of Urban Economics ↗</a>
         </article>
       </div>
       <p className="lit-method">
