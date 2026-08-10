@@ -1,6 +1,7 @@
 "use client";
 
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useState } from "react";
+import { Scrollama, Step } from "react-scrollama";
 import { D } from "./generated/data";
 
 type StoryStep = { kicker: string; title: string; body: string; link?: { href: string; label: string } };
@@ -13,43 +14,21 @@ const pctWithin800 = Math.round(((D.nHomes - D.anyDesc[4].n) / D.nHomes) * 100);
 const fmtPct = (v: number) => `${v > 0 ? "+" : v < 0 ? "−" : ""}${Math.abs(v).toFixed(1)}%`;
 const fmtT = (t: number) => `t = ${t < 0 ? "−" : ""}${Math.abs(t).toFixed(1)}`;
 
-function useScrollSteps(count: number) {
-  const [active, setActive] = useState(0);
-  const refs = useRef<(HTMLElement | null)[]>([]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible) setActive(Number((visible.target as HTMLElement).dataset.step));
-      },
-      { rootMargin: "-32% 0px -46% 0px", threshold: [0, 0.25, 0.6, 1] },
-    );
-    refs.current.slice(0, count).forEach((node) => node && observer.observe(node));
-    return () => observer.disconnect();
-  }, [count]);
-
-  return { active, refs };
-}
-
-function StoryText({ steps, active, refs }: { steps: StoryStep[]; active: number; refs: React.MutableRefObject<(HTMLElement | null)[]> }) {
+function StoryText({ steps, active, onStepEnter }: { steps: StoryStep[]; active: number; onStepEnter: (index: number) => void }) {
   return (
     <div className="story-copy">
-      {steps.map((step, index) => (
-        <section
-          className={`story-step ${active === index ? "is-active" : ""}`}
-          data-step={index}
-          ref={(node) => { refs.current[index] = node; }}
-          key={step.title}
-        >
-          <span>{step.kicker}</span>
-          <h2>{step.title}</h2>
-          <p>{step.body}</p>
-          {step.link && <a className="step-link" href={step.link.href} target="_blank" rel="noreferrer">{step.link.label} ↗</a>}
-        </section>
-      ))}
+      <Scrollama<number> offset={0.45} onStepEnter={({ data }) => onStepEnter(data)}>
+        {steps.map((step, index) => (
+          <Step data={index} key={step.title}>
+            <section className={`story-step ${active === index ? "is-active" : ""}`} data-step={index}>
+              <span>{step.kicker}</span>
+              <h2>{step.title}</h2>
+              <p>{step.body}</p>
+              {step.link && <a className="step-link" href={step.link.href} target="_blank" rel="noreferrer">{step.link.label} ↗</a>}
+            </section>
+          </Step>
+        ))}
+      </Scrollama>
     </div>
   );
 }
@@ -103,7 +82,7 @@ const mapSteps: StoryStep[] = [
 ];
 
 function MapStory() {
-  const { active, refs } = useScrollSteps(mapSteps.length);
+  const [active, setActive] = useState(0);
   return (
     <section className="scroll-story map-story">
       <div className="story-stage">
@@ -119,7 +98,7 @@ function MapStory() {
         </div>
         <Counter active={active} total={mapSteps.length} />
       </div>
-      <StoryText steps={mapSteps} active={active} refs={refs} />
+      <StoryText steps={mapSteps} active={active} onStepEnter={setActive} />
     </section>
   );
 }
@@ -145,7 +124,7 @@ const corridorSteps: StoryStep[] = [
 ];
 
 function CorridorStory() {
-  const { active, refs } = useScrollSteps(corridorSteps.length);
+  const [active, setActive] = useState(0);
   return (
     <section className="scroll-story corridor-story">
       <div className="story-stage">
@@ -162,7 +141,7 @@ function CorridorStory() {
         </div>
         <Counter active={active} total={corridorSteps.length} />
       </div>
-      <StoryText steps={corridorSteps} active={active} refs={refs} />
+      <StoryText steps={corridorSteps} active={active} onStepEnter={setActive} />
     </section>
   );
 }
@@ -291,7 +270,7 @@ function RingDiagram({ active }: { active: number }) {
 }
 
 function RingStory() {
-  const { active, refs } = useScrollSteps(ringSteps.length);
+  const [active, setActive] = useState(0);
   return (
     <section className="scroll-story ring-story">
       <div className="story-stage">
@@ -304,7 +283,7 @@ function RingStory() {
         </div>
         <Counter active={active} total={ringSteps.length} />
       </div>
-      <StoryText steps={ringSteps} active={active} refs={refs} />
+      <StoryText steps={ringSteps} active={active} onStepEnter={setActive} />
     </section>
   );
 }
