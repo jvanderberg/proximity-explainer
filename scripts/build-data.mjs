@@ -1,0 +1,147 @@
+// Regenerates app/generated/data.ts from the op-mf-proximity pipeline outputs.
+// Every number shown on the site comes from this script; nothing is hand-typed.
+// Usage: node scripts/build-data.mjs [path-to-op-mf-proximity]
+import { readFileSync, writeFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
+
+const here = dirname(fileURLToPath(import.meta.url));
+const SRC = process.argv[2] ?? join(here, "..", "..", "op-mf-proximity");
+const OUT = join(here, "..", "app", "generated", "data.ts");
+
+const results = JSON.parse(readFileSync(join(SRC, "outputs", "results.json"), "utf8"));
+const boundary = JSON.parse(readFileSync(join(SRC, "data", "boundary.geojson"), "utf8"));
+
+function csv(path) {
+  const [head, ...rows] = readFileSync(join(SRC, "data", path), "utf8").trim().split("\n");
+  const cols = head.split(",");
+  return rows.map((r) => {
+    const cells = r.split(",");
+    return Object.fromEntries(cols.map((c, i) => [c, cells[i]]));
+  });
+}
+
+const buildings = csv("exposures_classified.csv");
+const homes = csv("sf_homes.csv");
+
+// --- Projection: equirectangular, uniform scale, y down, fitted to boundary bbox.
+const ring = boundary.features[0].geometry.coordinates[0];
+const lats = ring.map((p) => p[1]);
+const lons = ring.map((p) => p[0]);
+const minLat = Math.min(...lats), maxLat = Math.max(...lats);
+const minLon = Math.min(...lons), maxLon = Math.max(...lons);
+const refCos = Math.cos(((minLat + maxLat) / 2) * (Math.PI / 180));
+const PAD = 14;
+const H = 640;
+const s = (H - 2 * PAD) / (maxLat - minLat);
+const W = Math.round((maxLon - minLon) * refCos * s + 2 * PAD);
+const px = (lon) => +(((lon - minLon) * refCos * s) + PAD).toFixed(1);
+const py = (lat) => +(((maxLat - lat) * s) + PAD).toFixed(1);
+
+const boundaryPath =
+  "M" + ring.map(([lon, lat]) => `${px(lon)} ${py(lat)}`).join("L") + "Z";
+
+// Homes: one giant path of 2x2 squares (one <path> renders far faster than 9,596 circles).
+const homesPath = homes
+  .map((h) => `M${(px(h.lon) - 1).toFixed(1)} ${(py(h.lat) - 1).toFixed(1)}h2v2h-2z`)
+  .join("");
+
+// Buildings: [x, y, corridor(0|1), category(a|c|t)]
+const CAT = { apartment: "a", condo: "c", townhome: "t" };
+const bldgPts = buildings.map((b) => [
+  px(b.lon),
+  py(b.lat),
+  +b.corridor_300,
+  CAT[b.category] ?? "a",
+]);
+const nCorridor = bldgPts.filter((b) => b[2] === 1).length;
+const nEmbedded = bldgPts.length - nCorridor;
+
+// --- Numbers from results.json (pct_effect fields are computed by the pipeline).
+const LABEL = {
+  "0-100ft": "0–100 ft",
+  "100-200ft": "100–200 ft",
+  "200-400ft": "200–400 ft",
+  "400-800ft": "400–800 ft",
+  ">=800ft": "800+ ft",
+};
+const BANDS = ["0-100ft", "100-200ft", "200-400ft", "400-800ft"];
+const band = (coefs, prefix) =>
+  BANDS.filter((b) => coefs[`${prefix}_${b}`]).map((b) => {
+    const c = coefs[`${prefix}_${b}`];
+    return { band: LABEL[b], pct: c.pct_effect, t: c.t };
+  });
+
+const anyDesc = results.descriptive.any.map((d) => ({
+  band: LABEL[d.band],
+  n: d.n,
+  medMV: d.med_mv,
+}));
+
+const naive = band(results.hedonic.any.baseline.coefs, "any");
+const split = {
+  corridor: band(results.hedonic.split["300ft"].coefs, "mf_corridor_300"),
+  embedded: band(results.hedonic.split["300ft"].coefs, "mf_embedded_300"),
+};
+const ringEmb = results.hedonic.ring["embedded@300ft"];
+const ringCor = results.hedonic.ring["corridor@300ft"];
+const ringModel = {
+  embedded: {
+    n: ringEmb.n_homes,
+    buildings: ringEmb.n_buildings,
+    bands: band(ringEmb.coefs, "mf_embedded_300"),
+  },
+  corridor: {
+    n: ringCor.n_homes,
+    buildings: ringCor.n_buildings,
+    bands: band(ringCor.coefs, "mf_corridor_300"),
+  },
+};
+const doseCoefs = results.hedonic.dose.grid_fe.coefs;
+const dose = ["dose_1", "dose_2", "dose_3plus"].map((k, i) => ({
+  label: ["1 building", "2 buildings", "3+ buildings"][i],
+  pct: doseCoefs[k].pct_effect,
+  t: doseCoefs[k].t,
+}));
+
+// Robustness: embedded 0-100ft estimate across thresholds and FE variants.
+const thresholds = ["200ft", "300ft", "400ft"].map((t) => ({
+  label: t.replace("ft", " ft"),
+  embedded: results.hedonic.split[t].coefs[`mf_embedded_${t.replace("ft", "")}_0-100ft`].pct_effect,
+  corridor: results.hedonic.split[t].coefs[`mf_corridor_${t.replace("ft", "")}_0-100ft`].pct_effect,
+}));
+const feVariants = [
+  ["No location control", "no_fe"],
+  ["11 neighborhoods", "nbhd_fe"],
+  ["148 grid cells", "grid_fe"],
+].map(([label, k]) => ({
+  label,
+  embedded: results.hedonic.fe_robustness[k].coefs["mf_embedded_300_0-100ft"].pct_effect,
+  corridor: results.hedonic.fe_robustness[k].coefs["mf_corridor_300_0-100ft"].pct_effect,
+}));
+
+const data = {
+  year: results.year,
+  nHomes: results.n,
+  nBuildings: bldgPts.length,
+  nCorridor,
+  nEmbedded,
+  map: { w: W, h: H, boundaryPath, homesPath, buildings: bldgPts },
+  anyDesc,
+  naive,
+  split,
+  ring: ringModel,
+  dose,
+  thresholds,
+  feVariants,
+};
+
+writeFileSync(
+  OUT,
+  `// GENERATED by scripts/build-data.mjs from the op-mf-proximity pipeline.\n` +
+    `// Do not edit by hand — rerun \`npm run build:data\`.\n` +
+    `export const D = ${JSON.stringify(data)} as const;\n`
+);
+console.log(
+  `wrote ${OUT}: ${bldgPts.length} buildings (${nCorridor} corridor / ${nEmbedded} embedded), ${homes.length} homes, map ${W}x${H}`
+);
