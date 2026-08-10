@@ -20,7 +20,6 @@ a { color: inherit; }
 .brand { font: bold 13px Georgia, serif; text-decoration: none; letter-spacing: .04em; }
 .hero { min-height: calc(100svh - 52px); display: grid; place-items: center; position: relative; overflow: hidden; background: var(--paper); }
 .hero-copy { position: relative; z-index: 2; text-align: center; max-width: 1180px; padding: 7svh 24px 9svh; display: flex; flex-direction: column; align-items: center; }
-.eyebrow { font-size: 10px; letter-spacing: .18em; font-weight: bold; color: var(--red); text-transform: uppercase; }
 .hero h1 { font: 700 clamp(52px, 7.4vw, 116px)/.9 Georgia, serif; letter-spacing: -.055em; margin: 20px 0 28px; max-width: 1100px; }
 .dek { font: 21px/1.45 Georgia, serif; max-width: 720px; margin: auto; }
 .byline { font-size: 11px; color: #5f5a53; margin-top: 26px; }
@@ -41,8 +40,7 @@ a { color: inherit; }
 .story-copy { padding: 22svh 0; }
 .story-step { min-height: 86svh; padding: 15svh 12% 10svh 15%; display: flex; flex-direction: column; justify-content: center; opacity: .18; transform: translateY(30px); transition: opacity .5s, transform .5s; }
 .story-step.is-active { opacity: 1; transform: translateY(0); }
-.story-step > span { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; font-weight: bold; color: var(--red); }
-.story-step h2 { font: clamp(34px, 3.6vw, 52px)/1.04 Georgia, serif; letter-spacing: -.04em; margin: 15px 0 25px; }
+.story-step h2 { font: clamp(34px, 3.6vw, 52px)/1.04 Georgia, serif; letter-spacing: -.04em; margin: 0 0 25px; }
 .story-step p { font: 18px/1.58 Georgia, serif; max-width: 460px; }
 .step-link { align-self: flex-start; font-size: 9px; letter-spacing: .06em; border: 1px solid currentColor; border-radius: 999px; padding: 9px 13px; text-decoration: none; margin-top: 6px; }
 .step-link:hover { background: var(--ink); color: #fff; }
@@ -107,8 +105,7 @@ a { color: inherit; }
 
 /* village band: embedded-only whole-village result */
 .village-band { padding: 110px 7vw; background: #fff; display: grid; grid-template-columns: .9fr 1.1fr; gap: 6vw; align-items: center; }
-.village-copy > span { font-size: 10px; letter-spacing: .18em; font-weight: bold; color: var(--red); }
-.village-copy h2 { font: clamp(34px, 3.6vw, 52px)/1.05 Georgia, serif; letter-spacing: -.04em; margin: 16px 0 22px; }
+.village-copy h2 { font: clamp(34px, 3.6vw, 52px)/1.05 Georgia, serif; letter-spacing: -.04em; margin: 0 0 22px; }
 .village-copy p { font: 18px/1.6 Georgia, serif; max-width: 520px; }
 .band-card { background: var(--card); border-top: 8px solid var(--navy); box-shadow: 0 25px 60px rgba(0, 0, 0, .12); padding: 24px 30px 16px; }
 
@@ -133,16 +130,13 @@ a { color: inherit; }
 
 /* ---------- bridges ---------- */
 .bridge { min-height: 78svh; background: var(--navy); color: white; display: grid; place-items: center; text-align: center; padding: 90px 24px; }
-.bridge > div > span { font-size: 10px; letter-spacing: .18em; color: #edb653; font-weight: bold; }
-.bridge h2 { font: clamp(42px, 5.6vw, 80px)/.98 Georgia, serif; letter-spacing: -.05em; max-width: 1050px; margin: 20px auto 30px; }
+.bridge h2 { font: clamp(42px, 5.6vw, 80px)/.98 Georgia, serif; letter-spacing: -.05em; max-width: 1050px; margin: 0 auto 30px; }
 .bridge p { font: 19px/1.6 Georgia, serif; max-width: 760px; margin: auto; color: #ccd9df; }
 .ring-bridge { background: var(--red); }
-.ring-bridge > div > span { color: #ffd5cc; }
 
 /* ---------- dose ---------- */
 .dose-band { padding: 110px 7vw; background: #fff; display: grid; grid-template-columns: 1.05fr .95fr; gap: 6vw; align-items: center; }
-.dose-copy > span { font-size: 10px; letter-spacing: .18em; font-weight: bold; color: var(--red); }
-.dose-copy h2 { font: clamp(34px, 3.6vw, 52px)/1.05 Georgia, serif; letter-spacing: -.04em; margin: 16px 0 22px; }
+.dose-copy h2 { font: clamp(34px, 3.6vw, 52px)/1.05 Georgia, serif; letter-spacing: -.04em; margin: 0 0 22px; }
 .dose-copy p { font: 18px/1.6 Georgia, serif; max-width: 520px; }
 .dose-tiles { display: grid; gap: 14px; }
 .dose-tile { border: 1px solid #ddd6c8; border-left: 6px solid var(--blue); padding: 20px 26px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2px 18px; background: var(--card); }
@@ -154,15 +148,13 @@ a { color: inherit; }
 .verdict-band { padding: 110px 7vw; background: var(--gold); display: grid; grid-template-columns: .85fr 1.15fr; gap: 7vw; align-items: center; }
 .verdict-stat { font: clamp(96px, 13vw, 190px)/.9 Georgia, serif; letter-spacing: -.06em; color: var(--navy); white-space: nowrap; display: flex; flex-direction: column; }
 .verdict-stat em { font: italic 16px/1 Georgia, serif; letter-spacing: 0; color: #6a5008; margin-top: 18px; }
-.verdict-band span { font-size: 10px; letter-spacing: .18em; font-weight: bold; color: var(--red); }
-.verdict-band h2 { font: clamp(40px, 4.8vw, 62px)/1 Georgia, serif; letter-spacing: -.04em; margin: 15px 0 25px; }
+.verdict-band h2 { font: clamp(40px, 4.8vw, 62px)/1 Georgia, serif; letter-spacing: -.04em; margin: 0 0 25px; }
 .verdict-band p { font: 19px/1.55 Georgia, serif; max-width: 600px; }
 
 /* ---------- literature ---------- */
 .lit-band { padding: 110px 7vw 100px; background: var(--navy); color: #fff; }
 .lit-intro { max-width: 860px; margin-bottom: 60px; }
-.lit-intro > span { font-size: 10px; letter-spacing: .18em; font-weight: bold; color: #edb653; }
-.lit-intro h2 { font: clamp(42px, 5.4vw, 76px)/1 Georgia, serif; letter-spacing: -.045em; margin: 16px 0 24px; }
+.lit-intro h2 { font: clamp(42px, 5.4vw, 76px)/1 Georgia, serif; letter-spacing: -.045em; margin: 0 0 24px; }
 .lit-intro p { font: 19px/1.6 Georgia, serif; color: #ccd9df; max-width: 760px; }
 .lit-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: #48657a; border: 1px solid #48657a; max-width: 980px; }
 .lit-cards article { background: var(--navy); padding: 38px 34px 34px; display: flex; flex-direction: column; }
@@ -176,8 +168,7 @@ a { color: inherit; }
 /* ---------- finale & footer ---------- */
 .finale { min-height: 85svh; background: var(--paper); display: grid; place-items: center; text-align: center; padding: 8vw; }
 .finale > div { max-width: 1100px; }
-.finale > div > span { font-size: 10px; letter-spacing: .18em; font-weight: bold; color: var(--red); }
-.finale .finale-quote { font: italic 20px/1.4 Georgia, serif; letter-spacing: 0; text-transform: none; font-weight: normal; }
+.finale .finale-quote { font: italic 20px/1.4 Georgia, serif; letter-spacing: 0; text-transform: none; color: var(--red); }
 .finale h2 { font: clamp(52px, 7.6vw, 112px)/.86 Georgia, serif; letter-spacing: -.06em; margin: 25px 0 40px; }
 .finale p { font: 20px/1.6 Georgia, serif; max-width: 760px; margin: 0 auto; }
 .finale-caveat { font-size: 15px !important; color: var(--muted); margin-top: 26px !important; }

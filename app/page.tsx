@@ -4,7 +4,7 @@ import { memo, useState } from "react";
 import { Scrollama, Step } from "react-scrollama";
 import { D } from "./generated/data";
 
-type StoryStep = { kicker: string; title: string; body: string; link?: { href: string; label: string } };
+type StoryStep = { title: string; body: string; link?: { href: string; label: string } };
 
 const PAPER_URL = "https://jvanderberg.github.io/op-mf-proximity/outputs/paper.html";
 const MAP_URL = "https://jvanderberg.github.io/op-mf-proximity/outputs/map.html";
@@ -21,7 +21,6 @@ function StoryText({ steps, active, onStepEnter }: { steps: StoryStep[]; active:
         {steps.map((step, index) => (
           <Step data={index} key={step.title}>
             <section className={`story-step ${active === index ? "is-active" : ""}`} data-step={index}>
-              <span>{step.kicker}</span>
               <h2>{step.title}</h2>
               <p>{step.body}</p>
               {step.link && <a className="step-link" href={step.link.href} target="_blank" rel="noreferrer">{step.link.label} ↗</a>}
@@ -65,17 +64,14 @@ const VillageSVG = memo(function VillageSVG() {
 
 const mapSteps: StoryStep[] = [
   {
-    kicker: "The fear",
     title: "“An apartment building next door will hurt my property value.”",
     body: "It comes up at every zoning hearing, and it's stated as settled fact. Oak Park's own data lets us check whether it's true.",
   },
   {
-    kicker: "The thing is",
     title: "It’s already next door.",
     body: `Oak Park has ${D.nBuildings.toLocaleString()} multi-family buildings: 2-flats, courtyard apartments, condo buildings, townhomes. They stand on the same blocks as its houses, most of them for a century now. Each dot is one of them, plotted from the Cook County Assessor's records.`,
   },
   {
-    kicker: "A village-sized experiment",
     title: "Nine out of ten houses sit within 800 feet of one.",
     body: `All ${D.nHomes.toLocaleString()} single-family homes in the village sit at some measurable distance from a multi-family building. If proximity really dragged values down, the pattern would be written all over this map. With the ${D.year} assessment of every property, we can go looking for it.`,
   },
@@ -107,17 +103,14 @@ function MapStory() {
 
 const corridorSteps: StoryStep[] = [
   {
-    kicker: "The method, continued",
     title: "Multi-family clusters on busy streets.",
     body: `Color each building by its location and the red dots trace the arterials: Harlem, North Avenue, Madison, Roosevelt, Austin. A corridor building fronts a named arterial, sits on a corner within 150 feet of one, or stands within 300 feet of commercial property. That's ${D.nCorridor.toLocaleString()} of the ${D.nBuildings.toLocaleString()}.`,
   },
   {
-    kicker: "Why that matters",
     title: "Busy streets discount houses all by themselves.",
     body: "Houses near arterials and commercial strips run 3–6% below similar houses on quiet blocks, with or without an apartment in sight. Leave that in and the street's discount gets pinned on whatever happens to be built along it. So corridor buildings are set aside and estimated separately.",
   },
   {
-    kicker: "The clean test",
     title: `That leaves ${D.nEmbedded} buildings, mid-block among houses.`,
     body: "The blue dots are embedded: multi-family on quiet residential streets, away from the arterials and the commercial strips. This is exactly the kind of building zoning reform would allow more of. The question is whether these discount their neighbors.",
   },
@@ -176,7 +169,6 @@ function VillageBand() {
   return (
     <section className="village-band">
       <div className="village-copy">
-        <span>THE RESULTS, CONTINUED</span>
         <h2>Zero at every distance, village-wide too.</h2>
         <p>
           {`The ring result isn't a quirk of the design. Compare all ${D.nHomes.toLocaleString()} houses at once, with full controls, and distance to embedded multi-family still doesn't matter: ${fmtPct(D.split.embedded[0].pct)} at 0–100 feet, statistically zero, and never negative at any distance.`}
@@ -197,18 +189,15 @@ function VillageBand() {
 
 const ringSteps: StoryStep[] = [
   {
-    kicker: "The strongest test",
     title: "Compare houses around the same building.",
     body: "Even within a neighborhood, blocks differ in ways no model fully captures. So the main analysis uses a stricter design: draw rings around each embedded building and compare only the houses that share it.",
     link: { href: PAPER_URL + "#ring", label: "The design, in the paper" },
   },
   {
-    kicker: "Apples to apples",
     title: "Each building becomes its own experiment.",
     body: "Houses within 100 feet of the building are compared to houses 400–800 feet from that same building: same micro-market, same schools, same street grid. Anything shared by the whole cluster cancels out. Only the nearness itself remains.",
   },
   {
-    kicker: "At scale",
     title: `${D.ring.embedded.buildings} buildings, ${D.ring.embedded.n.toLocaleString()} houses.`,
     body: "Run that comparison simultaneously around every embedded building with houses in its rings, with the full set of house controls on top. If living beside a 2-flat or a small apartment building costs you anything, this is where it shows up. That's the whole method. Now the results.",
   },
@@ -294,8 +283,7 @@ function DoseBand() {
   return (
     <section className="dose-band">
       <div className="dose-copy">
-        <span>WHAT ABOUT SEVERAL?</span>
-        <h2>More of them nearby makes no difference either.</h2>
+        <h2>Having several nearby makes no difference either.</h2>
         <p>
           Count the embedded multi-family buildings within 400 feet of each house. Houses with
           one, two, or three or more are worth the same as houses with none. Every difference
@@ -323,7 +311,6 @@ function VerdictBand() {
         <em>{fmtT(D.ring.embedded.bands[0].t)}</em>
       </div>
       <div>
-        <span>THE HEADLINE RESULT</span>
         <h2>Next to an embedded building: nothing.</h2>
         <p>
           {`Houses within 100 feet of an embedded multi-family building are valued ${fmtPct(D.ring.embedded.bands[0].pct)} relative to houses 400–800 feet from the same building. Statistically zero. The design isn't blind, either: run it on the corridor buildings we set aside and it finds their ${fmtPct(D.ring.corridor.bands[0].pct)} street discount. When there's a real effect, this method sees it. Next to embedded buildings, there is nothing to see.`}
@@ -337,7 +324,6 @@ function LiteratureBand() {
   return (
     <section className="lit-band">
       <div className="lit-intro">
-        <span>OAK PARK ISN&rsquo;T SPECIAL</span>
         <h2>The research keeps finding the same thing.</h2>
         <p>
           This is one suburb, measured once. But studies that look directly at what multi-family
@@ -375,7 +361,6 @@ export default function Home() {
 
       <section className="hero" id="top">
         <div className="hero-copy">
-          <p className="eyebrow">The proximity question</p>
           <h1>Do apartments hurt home values? Oak Park checked.</h1>
           <p className="dek">
             {`Every house, every apartment building, every 2-flat in the village, measured against each other in the county assessor's ${D.year} valuation. Here's what the data actually says about living next door to multi-family housing.`}
@@ -396,7 +381,6 @@ export default function Home() {
 
       <section className="bridge method-bridge">
         <div>
-          <span>THE METHOD</span>
           <h2>Compare like with like.</h2>
           <p>
             A house&rsquo;s value is mostly its size, lot, age, and condition. So every comparison from
@@ -412,7 +396,6 @@ export default function Home() {
 
       <section className="bridge ring-bridge">
         <div>
-          <span>THE METHOD, CONCLUDED</span>
           <h2>Then shrink every comparison to a single block.</h2>
         </div>
       </section>
