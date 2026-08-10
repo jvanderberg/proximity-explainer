@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://jvanderberg.github.io/proximity-explainer/"),
-  title: "Do Apartments Hurt Home Values? Oak Park Checked.",
+  title: "Do Apartments Hurt Home Values? Oak Park Already Ran the Experiment.",
   description:
     "A visual walk through every house and every multi-family building in Oak Park, Illinois, and what the data says about apartments and property values.",
   icons: {
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     shortcut: "/favicon.svg",
   },
   openGraph: {
-    title: "Do apartments hurt home values? Oak Park checked.",
+    title: "Do apartments hurt home values? Oak Park already ran the experiment.",
     description:
       "Houses next to mid-block apartment buildings are worth the same as identical houses two blocks away. A scroll-through of the data and the method.",
     url: "/",
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "Do apartments hurt home values? Oak Park checked.",
+    title: "Do apartments hurt home values? Oak Park already ran the experiment.",
     description:
       "Houses next to mid-block apartment buildings are worth the same as identical houses two blocks away. A scroll-through of the data and the method.",
   },

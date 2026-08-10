@@ -366,7 +366,7 @@ export default function Home() {
 
       <section className="hero" id="top">
         <div className="hero-copy">
-          <h1>Do apartments hurt home values? Oak Park checked.</h1>
+          <h1>Do apartments hurt home values? Oak Park already ran the experiment.</h1>
           <p className="dek">
             {`Every house, every apartment building, every 2-flat in the village, measured against each other in the county assessor's ${D.year} valuation. Here's what the data actually says about living next door to multi-family housing.`}
           </p>
