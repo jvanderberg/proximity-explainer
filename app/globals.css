@@ -177,6 +177,7 @@ a { color: inherit; }
 .finale { min-height: 85dvh; background: var(--paper); display: grid; place-items: center; text-align: center; padding: 8vw; }
 .finale > div { max-width: 1100px; }
 .finale > div > span { font-size: 10px; letter-spacing: .18em; font-weight: bold; color: var(--red); }
+.finale .finale-quote { font: italic 20px/1.4 Georgia, serif; letter-spacing: 0; text-transform: none; font-weight: normal; }
 .finale h2 { font: clamp(52px, 7.6vw, 112px)/.86 Georgia, serif; letter-spacing: -.06em; margin: 25px 0 40px; }
 .finale p { font: 20px/1.6 Georgia, serif; max-width: 760px; margin: 0 auto; }
 .finale-caveat { font-size: 15px !important; color: var(--muted); margin-top: 26px !important; }

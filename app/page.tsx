@@ -456,13 +456,13 @@ export default function Home() {
 
       <section className="finale">
         <div>
-          <span>THE LESSON</span>
-          <h2>The discount is the traffic, not the tenants.</h2>
+          <span className="finale-quote">&ldquo;An apartment building next door will hurt my property value.&rdquo;</span>
+          <h2>No, it won&rsquo;t.</h2>
           <p>
             Houses beside Oak Park&rsquo;s mid-block 2-flats, condo buildings, and townhomes are worth
-            the same as identical houses two blocks away. The one real discount in the data belongs to
-            busy streets, and it&rsquo;s there with or without apartments. The buildings zoning reform
-            would allow are precisely the kind that show no effect at all.
+            the same as identical houses two blocks away. At every distance, in every model, no matter
+            how many are nearby. The buildings zoning reform would allow on residential streets are
+            precisely the kind that show no effect at all.
           </p>
           <p className="finale-caveat">
             One honest caveat: these are the assessor&rsquo;s modeled market values, not closing prices,
