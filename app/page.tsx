@@ -463,7 +463,7 @@ export default function Home() {
             here on holds those fixed — building and lot square footage, age, bedrooms, bathrooms,
             fireplaces, central air, garage, basement, construction quality, repair state, and
             neighborhood. What&rsquo;s left is location: does distance to multi-family move the number?
-            One trap has to be dealt with first.
+            But there&rsquo;s a problem with measuring that naively — and it&rsquo;s visible on the map.
           </p>
         </div>
       </section>
