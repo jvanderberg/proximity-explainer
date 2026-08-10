@@ -88,17 +88,17 @@ const mapSteps: StoryStep[] = [
   {
     kicker: "The fear",
     title: "“An apartment building next door will hurt my property value.”",
-    body: "It comes up at every zoning hearing, stated with total confidence, as if it were a law of physics. Oak Park's own data lets us check whether it's true.",
+    body: "It comes up at every zoning hearing, and it's stated as settled fact. Oak Park's own data lets us check whether it's true.",
   },
   {
     kicker: "The thing is",
     title: "It’s already next door.",
-    body: `Oak Park has ${D.nBuildings.toLocaleString()} multi-family buildings — 2-flats, courtyard apartments, condo buildings, townhomes — standing on the same blocks as its houses, most of them for a century. Each dot is one of them, plotted from the Cook County Assessor's records.`,
+    body: `Oak Park has ${D.nBuildings.toLocaleString()} multi-family buildings: 2-flats, courtyard apartments, condo buildings, townhomes. They stand on the same blocks as its houses, most of them for a century now. Each dot is one of them, plotted from the Cook County Assessor's records.`,
   },
   {
     kicker: "A village-sized experiment",
     title: "Nine out of ten houses sit within 800 feet of one.",
-    body: `All ${D.nHomes.toLocaleString()} single-family homes in the village sit at some measurable distance from a multi-family building. If proximity really dragged values down, the pattern would be written all over this map — and with the ${D.year} assessment of every property, we can go looking for it.`,
+    body: `All ${D.nHomes.toLocaleString()} single-family homes in the village sit at some measurable distance from a multi-family building. If proximity really dragged values down, the pattern would be written all over this map. With the ${D.year} assessment of every property, we can go looking for it.`,
   },
 ];
 
@@ -130,12 +130,12 @@ const corridorSteps: StoryStep[] = [
   {
     kicker: "The method, continued",
     title: "Multi-family clusters on busy streets.",
-    body: `Color each building by its location and the red dots trace the arterials — Harlem, North Avenue, Madison, Roosevelt, Austin. A corridor building fronts a named arterial, sits on a corner within 150 feet of one, or stands within 300 feet of commercial property. That's ${D.nCorridor.toLocaleString()} of the ${D.nBuildings.toLocaleString()}.`,
+    body: `Color each building by its location and the red dots trace the arterials: Harlem, North Avenue, Madison, Roosevelt, Austin. A corridor building fronts a named arterial, sits on a corner within 150 feet of one, or stands within 300 feet of commercial property. That's ${D.nCorridor.toLocaleString()} of the ${D.nBuildings.toLocaleString()}.`,
   },
   {
     kicker: "Why that matters",
     title: "Busy streets discount houses all by themselves.",
-    body: "Houses near arterials and commercial strips run 3–6% below similar houses on quiet blocks — traffic, noise, curb cuts — apartment or no apartment. Leave that in and the street's discount gets pinned on whatever happens to be built along it. So corridor buildings are set aside, estimated separately from the question we care about.",
+    body: "Houses near arterials and commercial strips run 3–6% below similar houses on quiet blocks, with or without an apartment in sight. Leave that in and the street's discount gets pinned on whatever happens to be built along it. So corridor buildings are set aside and estimated separately.",
   },
   {
     kicker: "The clean test",
@@ -167,82 +167,49 @@ function CorridorStory() {
   );
 }
 
-/* ---------- Chapter 4: the split result ---------- */
+/* ---------- Chapter 4: the whole-village result, embedded only ---------- */
 
-const splitSteps: StoryStep[] = [
-  {
-    kicker: "The results, continued",
-    title: "Zero at every distance, village-wide too.",
-    body: `The ring result isn't a fluke of the design. In the whole-village model, houses near embedded multi-family show ${fmtPct(D.split.embedded[0].pct)} at 0–100 feet, ${fmtPct(D.split.embedded[1].pct)} at 100–200, ${fmtPct(D.split.embedded[2].pct)} at 200–400 — slightly positive, statistically indistinguishable from zero, never negative anywhere.`,
-  },
-  {
-    kicker: "And the streets we set aside?",
-    title: "The corridor discount is right where we left it.",
-    body: `Estimated in the same model, houses near corridor buildings run ${fmtPct(D.split.corridor[0].pct)} up close, fading with distance — the busy street being priced, exactly as expected. The street carries a discount. The building doesn't.`,
-  },
-];
-
-function SplitChart({ phase }: { phase: number }) {
-  const W = 620, H = 480, PL = 40, PT = 66;
-  const zero = PT + 120, scale = 34;
-  const bw = (W - PL - 14) / 4;
+function VillageChart() {
+  const W = 560, H = 350, PL = 18, zero = 240, scale = 56;
+  const bw = (W - PL * 2) / 4;
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="chart" role="img" aria-label="Value effect by distance band: corridor buildings show minus 5.8 to minus 1.3 percent; embedded buildings show plus 0.9 to plus 1.4 percent, statistically zero.">
-      <line className="zero" x1={PL - 26} y1={zero} x2={W - 14} y2={zero} />
-      <text className="zero-label" x={W - 16} y={zero - 6} textAnchor="end">0</text>
-      {D.split.corridor.map((d, i) => {
-        const bh = Math.abs(d.pct) * scale;
-        const x = PL + i * bw + 8;
-        const w = (bw - 26) / 2;
-        return (
-          <g key={d.band} className="cor-bar">
-            <rect className="bar neg" x={x} y={zero} width={w} height={bh} rx={3} />
-            <text className="val" x={x + w / 2} y={zero + bh + 20} textAnchor="middle">{fmtPct(d.pct)}</text>
-          </g>
-        );
-      })}
+    <svg viewBox={`0 0 ${W} ${H}`} className="chart" role="img" aria-label="Value effect of embedded multi-family by distance band, whole-village model: plus 1.2, plus 0.9, plus 1.3, and plus 1.4 percent, all statistically zero.">
+      <line className="zero" x1={PL} y1={zero} x2={W - PL} y2={zero} />
       {D.split.embedded.map((d, i) => {
         const bh = Math.abs(d.pct) * scale;
-        const x = PL + i * bw + 8 + (bw - 26) / 2 + 4;
-        const w = (bw - 26) / 2;
+        const x = PL + i * bw + 16;
+        const w = bw - 32;
         return (
-          <g key={d.band} className="emb-bar">
+          <g key={d.band}>
             <rect className="bar pos" x={x} y={zero - bh} width={w} height={bh} rx={3} />
-            <text className="val" x={x + w / 2} y={zero - bh - 10} textAnchor="middle">{fmtPct(d.pct)}</text>
-            <text className="tstat" x={x + w / 2} y={zero - bh - 26} textAnchor="middle">{fmtT(d.t)}</text>
+            <text className="val" x={x + w / 2} y={zero - bh - 12} textAnchor="middle">{fmtPct(d.pct)}</text>
+            <text className="tstat" x={x + w / 2} y={zero - bh - 30} textAnchor="middle">{fmtT(d.t)}</text>
+            <text className="cat" x={x + w / 2} y={zero + 22} textAnchor="middle">{d.band}</text>
           </g>
         );
       })}
-      {D.split.corridor.map((d, i) => (
-        <text key={d.band} className="cat" x={PL + i * bw + 8 + (bw - 26) / 2} y={H - 44} textAnchor="middle">{d.band}</text>
-      ))}
-      <text className="axis-title" x={W / 2} y={H - 12} textAnchor="middle">VALUE EFFECT VS. HOUSES 800+ FT AWAY · SAME MODEL, BOTH TYPES</text>
-      <g className="chart-legend">
-        <rect className="bar neg" x={PL - 26} y={PT - 40} width={14} height={14} rx={3} />
-        <text className="cat" x={PL - 6} y={PT - 28}>CORRIDOR</text>
-        <rect className="bar pos" x={PL + 110} y={PT - 40} width={14} height={14} rx={3} />
-        <text className="cat" x={PL + 130} y={PT - 28}>EMBEDDED</text>
-      </g>
-      {phase >= 1 && <text className="annotation" x={W / 2} y={PT + 6} textAnchor="middle">the discount tracks the street, not the housing type</text>}
+      <text className="axis-title" x={W / 2} y={H - 14} textAnchor="middle">VALUE VS. SIMILAR HOUSES 800+ FT FROM ANY MULTI-FAMILY · FULL CONTROLS</text>
     </svg>
   );
 }
 
-function SplitStory() {
-  const { active, refs } = useScrollSteps(splitSteps.length);
+function VillageBand() {
   return (
-    <section className="scroll-story split-story">
-      <div className="story-stage">
-        <div className={`stage-card sscene-${active}`}>
-          <div className="card-heading">
-            <span>WHOLE-VILLAGE MODEL · BOTH TYPES ESTIMATED TOGETHER</span>
-            <strong>{active === 0 ? "Embedded: flat everywhere" : "Corridor: the street being priced"}</strong>
-          </div>
-          <SplitChart phase={active} />
-        </div>
-        <Counter active={active} total={splitSteps.length} />
+    <section className="village-band">
+      <div className="village-copy">
+        <span>THE RESULTS, CONTINUED</span>
+        <h2>Zero at every distance, village-wide too.</h2>
+        <p>
+          {`The ring result isn't a quirk of the design. Compare all ${D.nHomes.toLocaleString()} houses at once, with full controls, and distance to embedded multi-family still doesn't matter: ${fmtPct(D.split.embedded[0].pct)} at 0–100 feet, statistically zero, and never negative at any distance.`}
+        </p>
       </div>
-      <StoryText steps={splitSteps} active={active} refs={refs} />
+      <div className="band-card">
+        <div className="card-heading">
+          <span>WHOLE-VILLAGE MODEL · EMBEDDED BUILDINGS</span>
+          <strong>Flat everywhere</strong>
+        </div>
+        <VillageChart />
+      </div>
     </section>
   );
 }
@@ -253,18 +220,18 @@ const ringSteps: StoryStep[] = [
   {
     kicker: "The strongest test",
     title: "Compare houses around the same building.",
-    body: "Even within a neighborhood, blocks differ in ways no model fully captures. So borrow the sharpest tool in the applied-economics kit: draw rings around each embedded building and compare only the houses that share it.",
+    body: "Even within a neighborhood, blocks differ in ways no model fully captures. So the main analysis uses a stricter design: draw rings around each embedded building and compare only the houses that share it.",
     link: { href: PAPER_URL + "#ring", label: "The design, in the paper" },
   },
   {
     kicker: "Apples to apples",
     title: "Each building becomes its own experiment.",
-    body: "Houses within 100 feet of the building are compared to houses 400–800 feet from that same building — same micro-market, same schools, same street grid. Anything shared by the whole cluster cancels out. Only the nearness itself remains.",
+    body: "Houses within 100 feet of the building are compared to houses 400–800 feet from that same building: same micro-market, same schools, same street grid. Anything shared by the whole cluster cancels out. Only the nearness itself remains.",
   },
   {
     kicker: "At scale",
     title: `${D.ring.embedded.buildings} buildings, ${D.ring.embedded.n.toLocaleString()} houses.`,
-    body: "Run that comparison simultaneously around every embedded building with houses in its rings, with the full set of house controls on top. If living beside a 2-flat or a small apartment building costs you anything, this is where it shows up. That's the whole method — now the results.",
+    body: "Run that comparison simultaneously around every embedded building with houses in its rings, with the full set of house controls on top. If living beside a 2-flat or a small apartment building costs you anything, this is where it shows up. That's the whole method. Now the results.",
   },
 ];
 
@@ -349,11 +316,11 @@ function DoseBand() {
     <section className="dose-band">
       <div className="dose-copy">
         <span>WHAT ABOUT SEVERAL?</span>
-        <h2>Three apartment buildings on the block move a house&rsquo;s value not at all.</h2>
+        <h2>More of them nearby makes no difference either.</h2>
         <p>
-          Compare houses by how many embedded multi-family buildings stand within 400 feet —
-          one, two, three or more — against houses with none nearby. Every difference is a
-          rounding error.
+          Count the embedded multi-family buildings within 400 feet of each house. Houses with
+          one, two, or three or more are worth the same as houses with none. Every difference
+          is a rounding error.
         </p>
       </div>
       <div className="dose-tiles">
@@ -380,7 +347,7 @@ function VerdictBand() {
         <span>THE HEADLINE RESULT</span>
         <h2>Next to an embedded building: nothing.</h2>
         <p>
-          {`Houses within 100 feet of an embedded multi-family building are valued ${fmtPct(D.ring.embedded.bands[0].pct)} relative to houses 400–800 feet from the same building — statistically zero. And the design isn't blind: run it on corridor buildings and it still finds ${fmtPct(D.ring.corridor.bands[0].pct)}. When there's a real effect, this method sees it. For embedded buildings, there is simply nothing to see.`}
+          {`Houses within 100 feet of an embedded multi-family building are valued ${fmtPct(D.ring.embedded.bands[0].pct)} relative to houses 400–800 feet from the same building. Statistically zero. The design isn't blind, either: run it on the corridor buildings we set aside and it finds their ${fmtPct(D.ring.corridor.bands[0].pct)} street discount. When there's a real effect, this method sees it. Next to embedded buildings, there is nothing to see.`}
         </p>
       </div>
     </section>
@@ -394,9 +361,9 @@ function LiteratureBand() {
         <span>OAK PARK ISN&rsquo;T SPECIAL</span>
         <h2>The research keeps finding the same thing.</h2>
         <p>
-          This is one suburb, measured once. But quasi-experimental studies — the kind that watch
-          what actually happens when multi-family arrives — reach the same conclusion in city
-          after city: neutral-to-positive effects on nearby values.
+          This is one suburb, measured once. But studies that watch what actually happens when
+          multi-family arrives reach the same conclusion in city after city: neutral-to-positive
+          effects on nearby values.
         </p>
       </div>
       <div className="lit-cards">
@@ -409,20 +376,20 @@ function LiteratureBand() {
         <article>
           <b>MINNEAPOLIS · 2021</b>
           <h3>Legalizing multi-family didn&rsquo;t dent house prices.</h3>
-          <p>After the 2040 Plan allowed triplexes on every lot, Kuhlmann found single-family parcels gaining multi-family rights rose modestly in value — they did not fall.</p>
+          <p>After the 2040 Plan allowed triplexes on every lot, Kuhlmann found single-family parcels gaining multi-family rights rose modestly in value. They did not fall.</p>
           <a href="https://www.tandfonline.com/doi/full/10.1080/01944363.2020.1852101" target="_blank" rel="noreferrer">J. of the American Planning Assoc. ↗</a>
         </article>
         <article>
           <b>AUCKLAND · 2023</b>
           <h3>Big upzoning, big building boom.</h3>
-          <p>Greenaway-McGrevy &amp; Phillips showed Auckland&rsquo;s sweeping upzoning set off a durable construction surge — the supply response skeptics said would never come.</p>
+          <p>Greenaway-McGrevy &amp; Phillips showed Auckland&rsquo;s sweeping upzoning set off the sustained construction surge that skeptics said would never come.</p>
           <a href="https://www.sciencedirect.com/science/article/pii/S0094119023000244" target="_blank" rel="noreferrer">Journal of Urban Economics ↗</a>
         </article>
       </div>
       <p className="lit-method">
-        The ring method itself is borrowed from Linden &amp; Rockoff (2008), who used it to measure
+        The ring method itself comes from Linden &amp; Rockoff (2008), who used it to measure
         how home values respond to a genuinely unwelcome neighbor. The design finds real effects
-        when they exist — that&rsquo;s the point.
+        when they exist. That&rsquo;s the point.
       </p>
     </section>
   );
@@ -438,7 +405,7 @@ export default function Home() {
           <p className="eyebrow">The proximity question</p>
           <h1>Do apartments hurt home values? Oak Park checked.</h1>
           <p className="dek">
-            {`Every house, every apartment building, every 2-flat in the village — measured against each other in the county assessor's ${D.year} valuation. Here's what the data actually says about living next door to multi-family housing.`}
+            {`Every house, every apartment building, every 2-flat in the village, measured against each other in the county assessor's ${D.year} valuation. Here's what the data actually says about living next door to multi-family housing.`}
           </p>
           <p className="byline">By Josh VanderBerg <span>•</span> Data from the Cook County Assessor</p>
           <a className="scroll-cue" href="#story">SCROLL TO BEGIN <b>↓</b></a>
@@ -448,7 +415,7 @@ export default function Home() {
       <section className="opening" id="story">
         <div className="intro-card">
           <p>Ask around and you&rsquo;ll hear it as settled fact: apartments drag down the value of the houses beside them.</p>
-          <p>It&rsquo;s a testable claim. And Oak Park — dense, walkable, and full of hundred-year-old multi-family housing — turns out to be the perfect place to test it.</p>
+          <p>It&rsquo;s a testable claim. And Oak Park, dense and full of hundred-year-old multi-family housing, is a good place to test it.</p>
         </div>
       </section>
 
@@ -460,10 +427,10 @@ export default function Home() {
           <h2>Compare like with like.</h2>
           <p>
             A house&rsquo;s value is mostly its size, lot, age, and condition. So every comparison from
-            here on holds those fixed — building and lot square footage, age, bedrooms, bathrooms,
+            here on holds those fixed: building and lot square footage, age, bedrooms, bathrooms,
             fireplaces, central air, garage, basement, construction quality, repair state, and
-            neighborhood. What&rsquo;s left is location: does distance to multi-family move the number?
-            But there&rsquo;s a problem with measuring that naively — and it&rsquo;s visible on the map.
+            neighborhood. What&rsquo;s left is location. Does distance to multi-family move the number?
+            There&rsquo;s a problem with measuring that naively, and it&rsquo;s visible on the map.
           </p>
         </div>
       </section>
@@ -472,7 +439,7 @@ export default function Home() {
 
       <section className="bridge ring-bridge">
         <div>
-          <span>THE SHARPEST TOOL</span>
+          <span>THE METHOD, CONCLUDED</span>
           <h2>Then shrink every comparison to a single block.</h2>
         </div>
       </section>
@@ -481,7 +448,7 @@ export default function Home() {
 
       <VerdictBand />
 
-      <SplitStory />
+      <VillageBand />
 
       <DoseBand />
 
@@ -494,7 +461,7 @@ export default function Home() {
           <p>
             Houses beside Oak Park&rsquo;s mid-block 2-flats, condo buildings, and townhomes are worth
             the same as identical houses two blocks away. The one real discount in the data belongs to
-            busy streets — and it&rsquo;s there with or without apartments. The buildings zoning reform
+            busy streets, and it&rsquo;s there with or without apartments. The buildings zoning reform
             would allow are precisely the kind that show no effect at all.
           </p>
           <p className="finale-caveat">
@@ -515,7 +482,7 @@ export default function Home() {
           <strong>Method:</strong> Cook County Assessor {D.year} valuations, all {D.nHomes.toLocaleString()} detached
           single-family homes in Oak Park township. Hedonic models with full house controls; corridor/embedded
           classification from arterial frontage and commercial proximity; ring design after Linden &amp; Rockoff (2008).
-          Every number on this page is generated by the open pipeline — nothing is hand-typed.
+          Every number on this page is generated by the open pipeline; nothing is hand-typed.
         </p>
         <div>
           <a href={REPO_URL} target="_blank" rel="noreferrer">Pipeline &amp; data</a>

@@ -105,10 +105,12 @@ a { color: inherit; }
 .chart .axis-title { font: 8.5px Arial, sans-serif; letter-spacing: .14em; fill: #9a937f; }
 .chart .annotation { font: italic 15px Georgia, serif; fill: var(--red); animation: chartIn .5s; }
 
-/* split scene: embedded results first, corridor contrast enters at step 1 */
-.sscene-0 .cor-bar { opacity: .12; }
-.sscene-1 .cor-bar { opacity: 1; }
-.emb-bar, .cor-bar { transition: opacity .6s; }
+/* village band: embedded-only whole-village result */
+.village-band { padding: 110px 7vw; background: #fff; display: grid; grid-template-columns: .9fr 1.1fr; gap: 6vw; align-items: center; }
+.village-copy > span { font-size: 10px; letter-spacing: .18em; font-weight: bold; color: var(--red); }
+.village-copy h2 { font: clamp(34px, 3.6vw, 52px)/1.05 Georgia, serif; letter-spacing: -.04em; margin: 16px 0 22px; }
+.village-copy p { font: 18px/1.6 Georgia, serif; max-width: 520px; }
+.band-card { background: var(--card); border-top: 8px solid var(--navy); box-shadow: 0 25px 60px rgba(0, 0, 0, .12); padding: 24px 30px 16px; }
 
 /* ---------- ring design ---------- */
 .ring-story .story-stage { background: var(--stage); }
@@ -216,6 +218,8 @@ footer a { white-space: nowrap; }
   .bridge h2 { font-size: 40px; }
   .verdict-band { grid-template-columns: 1fr; padding: 80px 24px; gap: 30px; }
   .verdict-stat { font-size: 88px; }
+  .village-band { grid-template-columns: 1fr; padding: 80px 24px; gap: 40px; }
+  .band-card { padding: 14px 14px 8px; }
   .dose-band { grid-template-columns: 1fr; padding: 80px 24px; }
   .lit-band { padding: 80px 24px; }
   .lit-cards { grid-template-columns: 1fr; }
