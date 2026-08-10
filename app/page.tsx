@@ -108,7 +108,7 @@ const corridorSteps: StoryStep[] = [
   },
   {
     title: "Busy streets discount houses all by themselves.",
-    body: "Houses near arterials and commercial strips run 3–6% below similar houses on quiet blocks, with or without an apartment in sight. Leave that in and the street's discount gets pinned on whatever happens to be built along it. So corridor buildings are set aside and estimated separately.",
+    body: `We measured this directly, with no multi-family terms in the model at all: houses within 100 feet of an arterial are assessed ${fmtPct(D.arterial[0].pct)} against similar houses on quiet blocks, apartment or no apartment. Leave that out and the street's discount gets pinned on whatever happens to be built along it. So corridor buildings are set aside and estimated separately.`,
   },
   {
     title: `That leaves ${D.nEmbedded} buildings, mid-block among houses.`,
@@ -124,7 +124,7 @@ function CorridorStory() {
         <div className={`map-frame cscene-${active}`}>
           <div className="map-heading">
             <span>SAME MAP · COLORED BY LOCATION</span>
-            <strong>{active === 0 ? "Corridor vs. embedded" : active === 1 ? "The street has its own effect" : "The embedded 965"}</strong>
+            <strong>{active === 0 ? "Corridor vs. embedded" : active === 1 ? "The street has its own effect" : `The embedded ${D.nEmbedded}`}</strong>
           </div>
           <VillageSVG />
           <div className="map-legend">
@@ -171,7 +171,7 @@ function VillageBand() {
       <div className="village-copy">
         <h2>Zero at every distance, village-wide too.</h2>
         <p>
-          {`The ring result isn't a quirk of the design. Compare all ${D.nHomes.toLocaleString()} houses at once, with full controls, and distance to embedded multi-family still doesn't matter: ${fmtPct(D.split.embedded[0].pct)} at 0–100 feet, statistically zero, and never negative at any distance.`}
+          {`The ring result isn't a quirk of the design. Compare all ${D.nHomes.toLocaleString()} houses at once, with full controls, and distance to embedded multi-family still doesn't matter: ${fmtPct(D.split.embedded[0].pct)} at 0–100 feet, statistically zero at every distance. It stayed zero under every alternative classification and check an independent adversarial audit of the pipeline demanded.`}
         </p>
       </div>
       <div className="band-card">
@@ -199,7 +199,7 @@ const ringSteps: StoryStep[] = [
   },
   {
     title: `${D.ring.embedded.buildings} buildings, ${D.ring.embedded.n.toLocaleString()} houses.`,
-    body: "Run that comparison simultaneously around every embedded building with houses in its rings, with the full set of house controls on top. If living beside a 2-flat or a small apartment building costs you anything, this is where it shows up. That's the whole method. Now the results.",
+    body: `Run that comparison simultaneously around every embedded building with houses in its rings, with the full set of house controls on top. ${D.ring.embedded.comparisons.groups_with_ref} of the ${D.ring.embedded.comparisons.n_groups} buildings have houses out in the reference band; those anchor the estimate. If living beside a 2-flat or a small apartment building costs you anything, this is where it shows up. That's the whole method. Now the results.`,
   },
 ];
 
@@ -318,7 +318,7 @@ function VerdictBand() {
       <div>
         <h2>Next to an embedded building: nothing.</h2>
         <p>
-          {`Houses within 100 feet of an embedded multi-family building are valued ${fmtPct(D.ring.embedded.bands[0].pct)} relative to houses 400–800 feet from the same building. Statistically zero. The design isn't blind, either: run it on the corridor buildings we set aside and it finds their ${fmtPct(D.ring.corridor.bands[0].pct)} street discount. When there's a real effect, this method sees it. Next to embedded buildings, there is nothing to see.`}
+          {`Houses within 100 feet of an embedded multi-family building are valued ${fmtPct(D.ring.embedded.bands[0].pct)} relative to houses 400–800 feet from the same building. Statistically zero. Restricted to the ${D.ring.embedded.comparisons.groups_with_ref} buildings with houses in both bands: ${fmtPct(D.ring.restricted0.pct)}. In ${D.sales.n.toLocaleString()} recorded sale prices: ${fmtPct(D.sales.emb0)}, zero again with wider error bars. And the design isn't blind: run it on the corridor buildings we set aside and it finds their ${fmtPct(D.ring.corridor.bands[0].pct)} street discount. When there's a real effect, this method sees it. Next to embedded buildings, there is nothing to see.`}
         </p>
       </div>
     </section>

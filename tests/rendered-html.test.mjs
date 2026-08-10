@@ -9,10 +9,10 @@ const here = dirname(fileURLToPath(import.meta.url));
 const html = readFileSync(join(here, "..", "out", "index.html"), "utf8");
 
 test("headline counts from the pipeline are rendered", () => {
-  assert.match(html, /2,332/); // multi-family buildings
+  assert.match(html, /2,041/); // multi-family buildings (deduplicated)
   assert.match(html, /9,596/); // single-family homes
-  assert.match(html, /965/); // embedded buildings
-  assert.match(html, /1,367/); // corridor buildings
+  assert.match(html, /889/); // embedded buildings
+  assert.match(html, /1,152/); // corridor buildings
 });
 
 test("key results are rendered", () => {

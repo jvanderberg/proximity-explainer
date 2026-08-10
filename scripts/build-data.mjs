@@ -89,6 +89,7 @@ const ringModel = {
   embedded: {
     n: ringEmb.n_homes,
     buildings: ringEmb.n_buildings,
+    comparisons: ringEmb.comparisons,
     bands: band(ringEmb.coefs, "mf_embedded_300"),
   },
   corridor: {
@@ -96,6 +97,25 @@ const ringModel = {
     buildings: ringCor.n_buildings,
     bands: band(ringCor.coefs, "mf_corridor_300"),
   },
+  restricted0: {
+    pct: results.hedonic.ring_restricted["embedded@300ft"].coefs["mf_embedded_300_0-100ft"].pct_effect,
+    t: results.hedonic.ring_restricted["embedded@300ft"].coefs["mf_embedded_300_0-100ft"].t,
+  },
+};
+
+// The street effect, measured directly on each home's own arterial distance
+// (grid FE, no multi-family terms), and the joint decomposition.
+const arterial = band(results.hedonic.arterial.grid_fe.coefs, "arterial");
+const decompC = results.hedonic.split_street_ctrl.grid_fe.coefs["mf_corridor_300_0-100ft"];
+const gridC = results.hedonic.fe_robustness.grid_fe.coefs["mf_corridor_300_0-100ft"];
+const decomp = {
+  corridorBefore: gridC.pct_effect,
+  corridorAfter: decompC.pct_effect,
+  arterial0: results.hedonic.split_street_ctrl.grid_fe.coefs["arterial_0-100ft"].pct_effect,
+};
+const sales = {
+  n: results.sales.n_joined,
+  emb0: results.sales.split_grid.coefs["mf_embedded_300_0-100ft"].pct_effect,
 };
 const doseCoefs = results.hedonic.dose.grid_fe.coefs;
 const dose = ["dose_1", "dose_2", "dose_3plus"].map((k, i) => ({
@@ -131,6 +151,9 @@ const data = {
   naive,
   split,
   ring: ringModel,
+  arterial,
+  decomp,
+  sales,
   dose,
   thresholds,
   feVariants,
