@@ -401,7 +401,7 @@ export default function Home() {
 
       <section className="bridge ring-bridge">
         <div>
-          <h2>Then shrink every comparison to a single block.</h2>
+          <h2>So what actually happens right next door?</h2>
         </div>
       </section>
 
