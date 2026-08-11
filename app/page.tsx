@@ -316,7 +316,7 @@ function VerdictBand() {
       <div>
         <h2>Next to an embedded building: nothing.</h2>
         <p>
-          {`Houses within 100 feet of an embedded multi-family building are valued ${fmtPct(D.ring.embedded.bands[0].pct)} relative to houses 400–800 feet from the same building. Statistically zero. Restricted to the ${D.ring.embedded.comparisons.groups_with_ref} buildings with houses in both bands: ${fmtPct(D.ring.restricted0.pct)}. In ${D.sales.n.toLocaleString()} recorded sale prices: ${fmtPct(D.sales.emb0)}, zero again with wider error bars. And the design isn't blind: run it on the corridor buildings we set aside and it finds their ${fmtPct(D.ring.corridor.bands[0].pct)} street discount. When there's a real effect, this method sees it. Next to embedded buildings, there is nothing to see.`}
+          {`Houses within 100 feet of an embedded building are worth the same as houses a few hundred feet from that very building. The difference: ${fmtPct(D.ring.embedded.bands[0].pct)}, statistically zero. And the method works: point it at the corridor buildings we set aside and it finds their street discount just fine. When there's a real effect, it shows up. Here, nothing does.`}
         </p>
       </div>
     </section>
