@@ -12,7 +12,6 @@ const REPO_URL = "https://github.com/jvanderberg/op-mf-proximity";
 
 const pctWithin800 = Math.round(((D.nHomes - D.anyDesc[4].n) / D.nHomes) * 100);
 const fmtPct = (v: number) => `${v > 0 ? "+" : v < 0 ? "−" : ""}${Math.abs(v).toFixed(1)}%`;
-const fmtT = (t: number) => `t = ${t < 0 ? "−" : ""}${Math.abs(t).toFixed(1)}`;
 
 function StoryText({ steps, active, onStepEnter }: { steps: StoryStep[]; active: number; onStepEnter: (index: number) => void }) {
   return (
@@ -155,7 +154,6 @@ function VillageChart() {
           <g key={d.band}>
             <rect className="bar pos" x={x} y={zero - bh} width={w} height={bh} rx={3} />
             <text className="val" x={x + w / 2} y={zero - bh - 12} textAnchor="middle">{fmtPct(d.pct)}</text>
-            <text className="tstat" x={x + w / 2} y={zero - bh - 30} textAnchor="middle">{fmtT(d.t)}</text>
             <text className="cat" x={x + w / 2} y={zero + 22} textAnchor="middle">{d.band}</text>
           </g>
         );
@@ -300,7 +298,7 @@ function DoseBand() {
           <div className="dose-tile" key={d.label}>
             <span>{d.label.toUpperCase()} WITHIN 400 FT</span>
             <strong>{fmtPct(d.pct)}</strong>
-            <em>{fmtT(d.t)} · zero</em>
+            <em>statistically zero</em>
           </div>
         ))}
       </div>
@@ -313,7 +311,7 @@ function VerdictBand() {
     <section className="verdict-band">
       <div className="verdict-stat">
         {fmtPct(D.ring.embedded.bands[0].pct)}
-        <em>{fmtT(D.ring.embedded.bands[0].t)}</em>
+        <em>statistically zero</em>
       </div>
       <div>
         <h2>Next to an embedded building: nothing.</h2>

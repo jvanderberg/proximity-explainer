@@ -95,7 +95,6 @@ a { color: inherit; }
 .chart .bar.single, .chart .bar.pos { fill: var(--blue); }
 .chart .bar.neg { fill: var(--red); }
 .chart .val { font: bold 15px Georgia, serif; fill: var(--ink); }
-.chart .tstat { font: 10px Arial, sans-serif; fill: var(--muted); }
 .chart .cat { font: 10px Arial, sans-serif; letter-spacing: .06em; fill: var(--muted); }
 .chart .sub { font: 9px Arial, sans-serif; fill: #9a937f; }
 .chart .axis { stroke: #c9c1b2; stroke-width: 1.2; }
