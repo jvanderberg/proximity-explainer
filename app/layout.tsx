@@ -17,12 +17,14 @@ export const metadata: Metadata = {
     url: "/",
     siteName: "Oak Park, Explained",
     type: "website",
+    images: [{ url: "og.png", width: 1200, height: 630, alt: "Do apartments hurt home values? Oak Park already ran the experiment." }],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Do apartments hurt home values? Oak Park already ran the experiment.",
     description:
       "Houses next to mid-block apartment buildings are worth the same as identical houses two blocks away. A scroll-through of the data and the method.",
+    images: ["og.png"],
   },
 };
 

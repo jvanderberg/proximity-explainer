@@ -18,8 +18,21 @@ a { color: inherit; }
 /* ---------- masthead & hero ---------- */
 .masthead { height: 52px; padding: 0 4vw; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #d2cec6; background: #fff; font-size: 10px; letter-spacing: .14em; position: relative; z-index: 20; }
 .brand { font: bold 13px Georgia, serif; text-decoration: none; letter-spacing: .04em; }
-.hero { min-height: calc(100svh - 52px); display: grid; place-items: center; position: relative; overflow: hidden; background: var(--paper); }
-.hero-copy { position: relative; z-index: 2; text-align: center; max-width: 1180px; padding: 7svh 24px 9svh; display: flex; flex-direction: column; align-items: center; }
+.hero { min-height: max(660px, calc(100svh - 52px)); display: grid; place-items: start center; position: relative; overflow: hidden; background: var(--paper); }
+.hero-copy { position: relative; z-index: 2; text-align: center; max-width: 1180px; padding: 5svh 24px calc(clamp(140px, 24svh, 220px) + 28px); display: flex; flex-direction: column; align-items: center; }
+
+/* hero streetscape: a quiet block of houses with 2-flats mid-block */
+.hero-street { position: absolute; left: -1%; bottom: -4px; width: 102%; height: clamp(140px, 24svh, 220px); display: flex; align-items: flex-end; gap: 1.1%; z-index: 1; }
+.lot { flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch; transform: translateY(115%); animation: streetRise .8s cubic-bezier(.16, 1, .3, 1) forwards; animation-delay: var(--d); }
+@keyframes streetRise { to { transform: translateY(0); } }
+.lot .bldg { height: var(--bh); display: grid; grid-template-columns: 1fr 1fr; gap: 7px; padding: 12px 11px; }
+.lot .bldg i { background: #f0ca80; min-height: 10px; }
+.lot .roof { display: block; width: 100%; height: 20%; min-height: 24px; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.lc-n .bldg, .lc-n .roof { background: var(--navy); }
+.lc-t .bldg, .lc-t .roof { background: #b78746; }
+.lc-r .bldg, .lc-r .roof { background: #b4553f; }
+.lc-b .bldg { background: var(--blue); }
+.lot-mf .bldg { padding-top: 16px; box-shadow: inset 0 7px 0 rgba(0, 0, 0, .16); }
 .hero h1 { font: 700 clamp(52px, 7.4vw, 116px)/.9 Georgia, serif; letter-spacing: -.055em; margin: 20px 0 28px; max-width: 1100px; }
 .dek { font: 21px/1.45 Georgia, serif; max-width: 720px; margin: auto; }
 .byline { font-size: 11px; color: #5f5a53; margin-top: 26px; }
@@ -188,6 +201,11 @@ footer a { white-space: nowrap; }
   .masthead > span { display: none; }
   .hero h1 { font-size: clamp(42px, 11.5vw, 56px); }
   .dek { font-size: 17px; }
+  .hero-street { height: clamp(100px, 16svh, 150px); gap: 1.6%; }
+  .hero-copy { padding-bottom: calc(clamp(100px, 16svh, 150px) + 24px); }
+  .lot:nth-child(n+8) { display: none; }
+  .lot .bldg { gap: 4px; padding: 7px 6px; }
+  .lot .roof { min-height: 14px; }
   .intro-card { padding: 32px 25px; }
   .intro-card p { font-size: 18px; }
   .scroll-story { display: block; }
@@ -219,6 +237,11 @@ footer a { white-space: nowrap; }
   .finale h2 { font-size: 56px; }
   footer { grid-template-columns: 1fr; }
   footer > div { justify-content: flex-start; }
+}
+@media (max-height: 840px) and (min-width: 851px) {
+  .hero h1 { font-size: clamp(44px, 5.8vw, 86px); margin: 14px 0 20px; }
+  .hero .dek { font-size: 18px; }
+  .hero-copy { padding-top: 3svh; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

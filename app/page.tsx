@@ -363,6 +363,21 @@ export default function Home() {
       <header className="masthead"><a href="#top" className="brand">OAK PARK, EXPLAINED</a><span>HOME VALUES · {D.year} ASSESSMENT</span></header>
 
       <section className="hero" id="top">
+        <div className="hero-street" aria-hidden="true">
+          {[
+            { k: "h", h: 46, c: "n" }, { k: "h", h: 58, c: "t" }, { k: "h", h: 50, c: "r" },
+            { k: "h", h: 54, c: "n" }, { k: "mf", h: 92, c: "b" }, { k: "h", h: 52, c: "t" },
+            { k: "h", h: 60, c: "n" }, { k: "h", h: 48, c: "r" }, { k: "mf", h: 84, c: "b" },
+            { k: "h", h: 56, c: "t" }, { k: "h", h: 50, c: "n" },
+          ].map((b, i) => (
+            <div className={`lot lot-${b.k} lc-${b.c}`} style={{ "--bh": `${b.h}%`, "--d": `${i * 60}ms` } as React.CSSProperties} key={i}>
+              {b.k === "h" && <i className="roof" />}
+              <div className="bldg">
+                {Array.from({ length: b.k === "mf" ? 6 : 2 }).map((_, w) => <i key={w} />)}
+              </div>
+            </div>
+          ))}
+        </div>
         <div className="hero-copy">
           <h1>Do apartments hurt home values? Oak Park already ran the experiment.</h1>
           <p className="dek">
