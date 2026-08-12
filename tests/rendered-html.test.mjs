@@ -32,3 +32,11 @@ test("links to paper, map, and repo exist", () => {
   assert.match(html, /op-mf-proximity\/outputs\/map\.html/);
   assert.match(html, /github\.com\/jvanderberg\/op-mf-proximity/);
 });
+
+test("assets and social metadata use the custom domain", () => {
+  assert.doesNotMatch(html, /\/proximity-explainer\//);
+  assert.match(html, /property="og:url" content="https:\/\/apartments\.yesoakpark\.org\/"/);
+  assert.match(html, /property="og:image" content="https:\/\/apartments\.yesoakpark\.org\/og\.png"/);
+  assert.match(html, /name="twitter:card" content="summary_large_image"/);
+  assert.match(html, /name="twitter:image" content="https:\/\/apartments\.yesoakpark\.org\/og\.png"/);
+});

@@ -1,6 +1,6 @@
 # proximity-explainer
 
-**[Read the live explainer →](https://jvanderberg.github.io/proximity-explainer/)**
+**[Read the live explainer →](https://apartments.yesoakpark.org/)**
 
 A scroll-driven visual explainer answering one question: **do apartments hurt
 the value of the houses next door?** It walks through the data and methodology
