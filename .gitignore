@@ -11,6 +11,7 @@
 
 # debug
 npm-debug.log*
+.cache/
 
 # typescript
 *.tsbuildinfo

@@ -35,6 +35,22 @@ nothing is hand-typed. `scripts/build-data.mjs` reads the sibling checkout of
 npm run build:data   # regenerate after re-running the pipeline
 ```
 
+The `/character/` collage is generated from the same pipeline classification.
+It vendors embedded apartment photo assets as smaller WebP files:
+
+```bash
+npm run build:collage-data
+npm run download:apartment-images
+```
+
+The downloader first supports browser-based Cook County Assessor image capture
+and can fill missing records with the Street View image format exposed on the
+assessor PIN pages:
+
+```bash
+npm run download:apartment-images -- --streetview-only
+```
+
 ## Development
 
 Next.js static export. Node 22.13+.
