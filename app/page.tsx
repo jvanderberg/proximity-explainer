@@ -72,7 +72,7 @@ const mapSteps: StoryStep[] = [
   },
   {
     title: "Nine out of ten houses sit within 800 feet of one.",
-    body: `For ${pctWithin800}% of the village's ${D.nHomes.toLocaleString()} single-family homes, the nearest multi-family building is less than 800 feet away — about a two-minute walk. If proximity really dragged values down, the pattern would be written all over this map. With the ${D.year} assessment of every property, we can go looking for it.`,
+    body: `For ${pctWithin800}% of the village's ${D.nHomes.toLocaleString()} single-family homes, the nearest multi-family building is less than 800 feet away, about a two-minute walk. If proximity really dragged values down, the pattern would be written all over this map. With the ${D.year} assessment of every property, we can go looking for it.`,
   },
 ];
 
